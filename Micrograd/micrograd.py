@@ -10,11 +10,11 @@ d = e+c; d.label ='d'
 f = Value(-2, label='f')
 L = f*d; L.label = 'L'
 L.grad = 1.0
-L.back_propagate()
+L.backward()
 
 draw_dot(L).render(directory='./', filename="basic")
 
-# Neuron Example
+## Neuron Example
 # Inputs x1, x2
 x1 =Value(2.0, label='Network Input 1')
 x2 =Value(0.0, label='Network Input 2')
@@ -39,7 +39,7 @@ n = x1w1_x2w2 + b; n.label='Weighted Neuron Value'
 # Neuron output
 o = n.tanh(); o.label='Neuron Output'
 o.grad = 1.0
-o.back_propagate()
+o.backward()
 
 draw_dot(o).render(directory='./', filename="neuron")
 
