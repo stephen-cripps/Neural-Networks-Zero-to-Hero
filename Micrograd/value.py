@@ -13,6 +13,7 @@ class Value:
         return f"Value(data={self.data})"
     
     def __add__(self, other):
+        other = other if isinstance(other,Value) else Value(other)
         out = Value(self.data + other.data, (self,other), '+')
         
         def backward(): 
@@ -21,8 +22,18 @@ class Value:
         
         out._backward = backward
         return out
+    
+    def __radd__(self,other):
+        return other + self
+    
+    def __sub__(self, other):
+        return self +(-other)
+    
+    def _neg__(self):
+        return self * -1
         
     def __mul__(self, other):
+        other = other if isinstance(other,Value) else Value(other)
         out = Value(self.data * other.data, (self,other), '*')  
         
         def backward(): 
@@ -32,6 +43,19 @@ class Value:
         out._backward = backward
         return out
     
+    def __rmul__(self,other):
+        return other * self
+    
+    def exp(self):
+        x = self.data
+        out = Value(math.exp(x), (self, ), 'exp')
+        
+        def backward():
+            self.grad += out.data * out.grad
+            
+        out._backward = backward
+        return out
+        
     def tanh(self):
         x = self.data
         t = (math.exp(2*x) -1)/(math.exp(2*x) +1)         
@@ -43,6 +67,19 @@ class Value:
         out._backward = backward
         return out
     
+    def __pow__(self, other):
+        assert isinstance(other, (int,float)), "Only supporting ints and floats"
+        out = Value(self.data**other, (self,), f'**{other}')
+        
+        def backward():
+            self.grad += other*self.data**(other-1) * out.grad
+            
+        out._backward=backward
+        return out
+    
+    def __truediv__(self, other):
+        return self*other**-1
+    
     def _build_label(self, parents, op):
         if len(parents) != 2:
             return ''
@@ -50,7 +87,7 @@ class Value:
         l = list(parents)
         return f'{l[0].label} {op} {l[1].label}'
     
-    def backward(self):
+    def back_propagate(self):
         sorted = []
         visited = set()
         def build_topological_list(input):
@@ -65,31 +102,3 @@ class Value:
 
         for node in reversed(sorted):
             node._backward()
-        
-    
-    # # My BackPropagation attempt pre-tutorial - backward was added in as part of the tutorial. Nice.
-    # def back_propagate(self):
-    #     if len(self._prev) == 0:
-    #         return
-        
-    #     l = list(self._prev)
-        
-    #     if self._op == '*':
-    #         l[0].grad = self.grad * l[1].data
-    #         l[1].grad = self.grad * l[0].data
-    #     elif self._op == '+':
-    #         l[0].grad = self.grad
-    #         l[1].grad = self.grad  
-    #     elif self._op == 'tanh':
-    #         l[0].grad = 1-(self.data)**2 # self is tanh of the child => 1-tanh(child.data)**2 = 1-self.data**2
-            
-
-    #     l[0].back_propagate() 
-        
-    #     if len(l) == 2:
-    #         l[1].back_propagate()
-    #         self._prev=(l[0], l[1])
-    #     else:
-    #         self._prev=(l[0], )
-        
-        
