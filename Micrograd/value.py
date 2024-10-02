@@ -1,3 +1,6 @@
+import math
+
+
 class Value: 
     def __init__(self, data, _children=(), _op=(), label=''):
         self.data = data
@@ -14,6 +17,11 @@ class Value:
         
     def __mul__(self, other):
         return Value(self.data * other.data, (self,other), '*')    
+    
+    def tanh(self):
+        x = self.data
+        t = (math.exp(2*x) -1)/(math.exp(2*x) +1)
+        return Value(t, (self,), 'tanh')
     
     def _build_label(self, children, op):
         if len(children) != 2:
@@ -35,10 +43,16 @@ class Value:
         elif self._op == '+':
             l[0].grad = self.grad
             l[1].grad = self.grad  
+        elif self._op == 'tanh':
+            l[0].grad = 1-(self.data)**2 # self is tanh of the child => 1-tanh(child.data)**2 = 1-self.data**2
             
-        l[0].back_propagate()          
-        l[1].back_propagate()
+
+        l[0].back_propagate() 
         
-        self._prev={l[0], l[1]}
+        if len(l) == 2:
+            l[1].back_propagate()
+            self._prev=(l[0], l[1])
+        else:
+            self._prev=(l[0], )
         
         
