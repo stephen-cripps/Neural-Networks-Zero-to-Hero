@@ -162,3 +162,4 @@ cython_debug/
 #.idea/
 Micrograd/Digraph.gv
 Micrograd/Digraph.gv.svg
+/Micrograd/graphics
