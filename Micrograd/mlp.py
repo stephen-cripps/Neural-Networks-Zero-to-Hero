@@ -11,6 +11,9 @@ class Neuron:
     activation = sum((weight * input for weight, input in zip(self.weights, inputs)), self.bias)
     return activation.tanh()
 
+  def parameters(self):
+    return self.weights + [self.bias]
+
 
 class Layer:
   def __init__(self, num_inputs, num_outputs) -> None:
@@ -18,6 +21,9 @@ class Layer:
 
   def __call__(self, inputs):
     return [n(inputs) for n in self.neurons]
+
+  def parameters(self):
+    return [param for neuron in self.neurons for param in neuron.parameters()]
 
 
 class MLP:
@@ -32,3 +38,6 @@ class MLP:
       inputs = outputs
 
     return outputs[0] if len(outputs) == 1 else outputs
+
+  def parameters(self):
+    return [param for layer in self.layers for param in layer.parameters()]

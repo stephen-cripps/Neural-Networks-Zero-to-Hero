@@ -25,7 +25,7 @@ class Value:
     return out
 
   def __radd__(self, other):
-    return other + self
+    return self + other
 
   def __sub__(self, other):
     return self + (-other)
@@ -45,7 +45,7 @@ class Value:
     return out
 
   def __rmul__(self, other):
-    return other * self
+    return self * other
 
   def exp(self):
     x = self.data
@@ -83,6 +83,7 @@ class Value:
     return self * other**-1
 
   def back_propagate(self):
+    self.grad = 1
     sorted = []
     visited = set()
 

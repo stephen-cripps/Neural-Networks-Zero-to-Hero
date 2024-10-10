@@ -12,5 +12,12 @@ example_data = [
 
 desired_outputs = [1.0, -1.0, -1.0, 1.0]
 
-predictions = [mlp(x) for x in example_data]
-print(predictions)
+for _ in range(100):
+  outputs = [mlp(x) for x in example_data]
+  loss = sum((output - desired_output)**2 for desired_output, output in zip(desired_outputs, outputs))
+  loss.back_propagate()
+  for p in mlp.parameters():
+    p.data += -0.05 * p.grad
+    p.grad = 0.0
+
+print(outputs)
