@@ -78,5 +78,5 @@ for idx, playlist in enumerate(playlists):
   print(f'getting artists in playlist {idx + 1} of {len(playlists)}')
   artists |= get_playlist_artists(token, playlist)
 
-with open('./artists', 'w', encoding='utf-8') as outfile:
+with open('./artists.txt', 'w', encoding='utf-8') as outfile:
   outfile.write('\n'.join(str(i) for i in artists))
