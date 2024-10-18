@@ -1,0 +1,8 @@
+import importlib
+import nn_version.nn_reader
+import nn_version.nn_makemore
+importlib.reload(nn_version.nn_reader)
+importlib.reload(nn_version.nn_makemore)
+
+global read_file_and_generate_training_set
+read_file_and_generate_training_set = nn_version.nn_reader.read_file_and_generate_training_set
