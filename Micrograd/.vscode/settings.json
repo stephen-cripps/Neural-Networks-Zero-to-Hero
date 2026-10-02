@@ -2,5 +2,6 @@
     "cSpell.words": [
         "grapher",
         "graphviz"
-    ]
+    ],
+    "python-envs.defaultEnvManager": "ms-python.python:system"
 }
