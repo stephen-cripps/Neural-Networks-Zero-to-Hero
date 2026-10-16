@@ -1,7 +1,13 @@
 {
-    "name": "Python: main.py (Integrated Terminal)",
-    "type": "python",
-    "request": "launch",
-    "program": "${workspaceFolder}/micrograd.py",
-    "console": "integratedTerminal"
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: micrograd.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/micrograd.py",
+            "console": "integratedTerminal",
+            "python": "${workspaceFolder}/micrograd/Scripts/python.exe"
+        }
+    ]
 }
