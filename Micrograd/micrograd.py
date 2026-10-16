@@ -1,3 +1,4 @@
+from multi_layer_perceptron import MLP, Neuron, Layer
 from value import Value
 from grapher import draw_dot  
 
@@ -22,8 +23,15 @@ o = (e-1)/(e+1)
 
 o.backward()
 
-dot = draw_dot(o)
+# dot = draw_dot(o)
+# dot.view(directory="output")
 
-dot.view(directory="output")
+### ---- Second part - Neutons -------
 
-## Video paused at 1:26:39
+x=[2.0,3.0,-1.0]
+n=MLP(3,[4,4,1]) # 3 inputs into 2 layers of 4 into 1 output
+print('n(x)', n(x))
+
+draw_dot(n(x)).view(directory="output")
+
+## Video paused at 1:51:05
