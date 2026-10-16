@@ -41,18 +41,20 @@ class Value:
         assert isinstance(other, (int, float)
                           ),  "Only supporting int/float powers for now"
 
-        out = Value(self.data * other.data, (self, other), f'**{other}')
+        out = Value(self.data ** other, (self,), f'**{other}')
 
         def _backward():
             self.grad += other * (self.data**(other-1)) * out.grad
 
         out.backward = _backward
 
+        return out
+
     def __rmul__(self, other):
         return self * other
 
-    def _truediv__(self, other):
-        return self * other ** -1
+    def __truediv__(self, other):
+        return self * other**-1
 
     def __neg__(self):  # -self
         return self * -1

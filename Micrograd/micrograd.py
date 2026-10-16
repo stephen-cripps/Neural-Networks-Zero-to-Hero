@@ -26,12 +26,4 @@ dot = draw_dot(o)
 
 dot.view(directory="output")
 
-
-a = Value(3.0, label='a')
-b = a + a   ; b.label = 'b'
-b.backward()
-dot = draw_dot(b)
-dot.view(directory="output")
-
-
 ## Video paused at 1:26:39
