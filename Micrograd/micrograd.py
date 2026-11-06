@@ -14,11 +14,11 @@ b = Value(6.8813735870195432, label='b')
 x1w1 = x1*w1; x1w1.label = 'x1*w1'
 x2w2 = x2*w2; x2w2.label = 'x2*w2'
 x1w1x2w2 = x1w1 + x2w2; x1w1x2w2.label = 'x1*w1 + x2*w2'
-n = x1w1x2w2 + b; n.label = 'n'
+mlp = x1w1x2w2 + b; mlp.label = 'n'
 
 # o = n.tanh(); o.label = 'o'
 # Manually calculate tanh for clearer backProp values
-e = (2*n).exp()
+e = (2*mlp).exp()
 o = (e-1)/(e+1) 
 
 o.backward()
@@ -26,12 +26,32 @@ o.backward()
 # dot = draw_dot(o)
 # dot.view(directory="output")
 
-### ---- Second part - Neutons -------
+### ---- Second part - Neurons -------
 
-x=[2.0,3.0,-1.0]
-n=MLP(3,[4,4,1]) # 3 inputs into 2 layers of 4 into 1 output
-print('n(x)', n(x))
+xs=[
+  [2.0, 3.0, -1.0],
+  [3.0, -1.0, 0.5],
+  [0.5, 1.0, 1.0],
+  [1.0, 1.0, -1.0]
+]
+ys=[1.0, -1.0, -1.0, 1.0] # Desired targets
 
-draw_dot(n(x)).view(directory="output")
+mlp=MLP(3,[4,4,1]) # 3 inputs into 2 layers of 4 into 1 output
 
-## Video paused at 1:51:05
+  
+for i in range(100):
+  # Forward Pass (setting values)
+  ypred = [mlp(x) for x in xs] 
+  loss = sum((yout-ygt)**2 for ygt, yout in zip(ys, ypred))  # measure of how well the neural net is performing (sum of difference squared)
+  print('loss', loss)
+
+  # Back Pass (re-calculating  grads)
+  for p in mlp.parameters():
+    p.grad = 0.0
+  loss.backward()
+  
+  # Update weights and biases based on grad
+  for p in mlp.parameters():
+    p.data -= 0.05 * p.grad # Update weights and biases based on grad
+    
+print('ypred', ypred)
