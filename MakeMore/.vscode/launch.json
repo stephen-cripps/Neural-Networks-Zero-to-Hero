@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: makemore.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/makemore.py",
+            "console": "integratedTerminal",
+            "python": "${workspaceFolder}/makemore/Scripts/python.exe"
+        }
+    ]
+}
